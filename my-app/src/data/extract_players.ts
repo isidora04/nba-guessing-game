@@ -13,7 +13,7 @@ for (const athlete of rawData.athletes) {
 
     const name = athlete.displayName;
     const height = athlete.height;
-    const displayHeight = athlete.displayHeight[0] + athlete.displayHeight[1] + athlete.displayHeight[3];
+    const displayHeight = athlete.displayHeight;
     const age = athlete.age;
     const position = athlete.position?.abbreviation;
     const jerseyNumber = parseInt(athlete.jersey);
