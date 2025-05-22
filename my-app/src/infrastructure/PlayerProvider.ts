@@ -1,15 +1,15 @@
-import { BalldontlieAPI } from "@balldontlie/sdk";
+import data from "../data/clean_data.json";
 
 export interface PlayerInfo {
     name: string;
     position: string;
-    height: string;
+    height: number;
+    displayHeight: string;
     jerseyNumber: number;
-    draftYear: number;
+    age: number;
+    team: string;
     conference: string;
     division: string;
-    team: string;
-    country: string;
 }
 
 export class PlayerProvider {
@@ -20,31 +20,15 @@ export class PlayerProvider {
 
         if (!this.playerList) {
 
-            const API_KEY: string = process.env.REACT_APP_API_KEY || "";
-            if (!API_KEY) {
-                throw new Error("Missing API key");
-            }
-            const api = new BalldontlieAPI({ apiKey: API_KEY });
+            // process the data file
             let allPlayers: any[] = [];
 
-            for (let i = 0; i < 5; i++) {
-                let getPage = await api.nba.getPlayers({per_page: 100, cursor: i * 100});
-                allPlayers = allPlayers.concat(getPage.data);
-            } // change to espn api
-
-            this.playerList = allPlayers.filter(
-                p => p.draft_year && p.jersey_number && parseInt(p.draft_year) >= 2004)
-                .map(p => ({
-                    name: `${p.first_name} ${p.last_name}`,
-                    position: p.position,
-                    height: p.height,
-                    jerseyNumber: parseInt(p.jersey_number),
-                    draftYear: parseInt(p.draft_year),
-                    conference: p.team?.conference,
-                    division: p.team?.division,
-                    team: p.team?.abbreviation,
-                    country: p.country,
-            }));
+            for (const team of data) {
+                for (const player of team) {
+                    allPlayers.push(player);
+                }
+            }
+            this.playerList = allPlayers;
         }
     }
     

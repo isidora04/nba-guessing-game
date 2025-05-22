@@ -11,13 +11,13 @@ const GamePage = () => {
     const [ targetPlayer, setTargetPlayer ] = useState<PlayerInfo>({
             name: "",
             position: "",
-            height: "",
+            height: -1,
+            displayHeight: "",
             jerseyNumber: -1,
-            draftYear: -1,
             conference: "",
             division: "",
             team: "",
-            country: ""
+            age: -1
     });
     const [ guessCount, setGuessCount ] = useState(0);
     const [ guesses, setGuesses ] = useState<GuessFeedback[]>(Array(8).fill(defaultGuess));
@@ -82,7 +82,7 @@ const GamePage = () => {
                 setWinCount(winCount + 1);
                 handleWin();
             }
-            if (guessCount + 1 === 8) {
+            if (guessFeedback.name.match !== "correct" && guessCount + 1 === 8) {
                 handleLoss();
             }
             setSearch(""); // reset
@@ -107,7 +107,7 @@ const GamePage = () => {
         <div className="game-container">
             <div className="game-header">
                 <h1>NBA Guessing Game</h1>
-                <p>Guess the NBA player in 8 tries</p>
+                <p>Guess the NBA player in 8 tries!</p>
                 <div className="num-wins">
                     <p><Trophy className="trophy" />{winCount}/{gamesPlayed} wins</p>
                     <button className="circle-help"><CircleHelp /></button>
@@ -120,7 +120,7 @@ const GamePage = () => {
                 value={search} onChange={(e) => setSearch(e.target.value)} 
                 disabled={winPopup || lossPopup} />
             {searchResults.length !== 0 && 
-                (<div className="search-results">
+                (<div className={searchResults.length > 4 ? "search-results results-scroll" : "search-results"}>
                     {
                         searchResults.map((player) => (
                             <button key={player.name} onClick={() => handleClick(player)}
@@ -137,10 +137,9 @@ const GamePage = () => {
                         <th>Conference</th>
                         <th>Division</th>
                         <th>Position</th>
+                        <th>Age</th>
                         <th>Height</th>
                         <th>Number</th>
-                        <th>Draft Year</th>
-                        <th>Country</th>
                     </tr>
                 </thead>
                 <tbody className="table-body">
@@ -152,6 +151,13 @@ const GamePage = () => {
                             <td className={guess.conference.match}>{guess.conference.value}</td>
                             <td className={guess.division.match}>{guess.division.value}</td>
                             <td className={guess.position.match}>{guess.position.value}</td>
+                            <td className={guess.age.match}>
+                                <div>
+                                    {guess.age.value}
+                                    {guess.age.match === "lower" && <ArrowDown className="arrow" />}
+                                    {guess.age.match === "higher" && <ArrowUp className="arrow" />}
+                                </div>
+                            </td>
                             <td className={guess.height.match}>
                                 <div>
                                     {guess.height.value}
@@ -166,14 +172,7 @@ const GamePage = () => {
                                     {guess.jerseyNumber.match === "higher" && <ArrowUp className="arrow" />}
                                 </div>
                             </td>
-                            <td className={guess.draftYear.match}>
-                                <div>
-                                    {guess.draftYear.value}
-                                    {guess.draftYear.match === "lower" && <ArrowDown className="arrow" />}
-                                    {guess.draftYear.match === "higher" && <ArrowUp className="arrow" />}
-                                </div>
-                            </td>
-                            <td className={guess.country.match}>{guess.country.value}</td></>
+                        </>
                         }
                     </tr>)
                 )}

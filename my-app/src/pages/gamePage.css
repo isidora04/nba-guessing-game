@@ -24,7 +24,7 @@ h1 {
     flex-direction: column;
     gap: 0.5rem;
     align-items: center;
-    margin: 1rem 0.5rem;
+    margin: 2rem 0.5rem;
 }
 
 .game-header p {
@@ -253,4 +253,9 @@ td div {
 .play-again-button:hover {
     cursor: pointer;
     background-color: #da6a1a;
+}
+
+.results-scroll {
+    max-height: 8.2rem;
+    overflow-y: scroll;
 }

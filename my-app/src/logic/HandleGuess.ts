@@ -12,19 +12,13 @@ export interface GuessFeedback {
   position: AttributeFeedback;
   height: AttributeFeedback;
   jerseyNumber: AttributeFeedback;
-  draftYear: AttributeFeedback;
   conference: AttributeFeedback;
   division: AttributeFeedback;
   team: AttributeFeedback;
-  country: AttributeFeedback;
+  age: AttributeFeedback;
 }
 
 export class HandleGuess {
-    
-    static parseHeight(height: string): number {
-        const [feet, inches] = height.split("-").map(Number);
-        return feet * 12 + inches;
-    }
 
     static getBlankGuess(): GuessFeedback {
         return {
@@ -32,11 +26,10 @@ export class HandleGuess {
             position: {value: "", match: "incorrect"},
             height: {value: "", match: "incorrect"},
             jerseyNumber: {value: "", match: "incorrect"},
-            draftYear: {value: "", match: "incorrect"},
             conference: {value: "", match: "incorrect"},
             division: {value: "", match: "incorrect"},
             team: {value: "", match: "incorrect"},
-            country: {value: "", match: "incorrect"}
+            age: {value: "", match: "incorrect"}
         }
     }
 
@@ -55,9 +48,9 @@ export class HandleGuess {
                     ? "partial" : "incorrect"
             },
             height: {
-                value: guess.height, 
+                value: guess.displayHeight, 
                 match: guess.height === target.height ? "correct" :
-                    this.parseHeight(guess.height) > this.parseHeight(target.height) 
+                    guess.height > target.height 
                     ? "lower" : "higher"
             },
             jerseyNumber: {
@@ -65,10 +58,10 @@ export class HandleGuess {
                 match: guess.jerseyNumber === target.jerseyNumber ? "correct" :
                     guess.jerseyNumber > target.jerseyNumber ? "lower" : "higher"
             },
-            draftYear: {
-                value: guess.draftYear, 
-                match: guess.draftYear === target.draftYear ? "correct" :
-                    guess.draftYear > target.draftYear ? "lower" : "higher"
+            age: {
+                value: guess.age, 
+                match: guess.age === target.age ? "correct" :
+                    guess.age > target.age ? "lower" : "higher"
             },
             conference: {
                 value: guess.conference, 
@@ -81,10 +74,6 @@ export class HandleGuess {
             team: {
                 value: guess.team, 
                 match: guess.team === target.team ? "correct" : "incorrect"
-            },
-            country: {
-                value: guess.country, 
-                match: guess.country === target.country ? "correct" : "incorrect"
             },
         };
 
