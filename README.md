@@ -10,7 +10,6 @@ A browser-based game where you try to guess the NBA player based on clues like t
 ## Technologies Used
 
 - **Frontend**: React + TypeScript
-- **Data**: Cleaned JSON from ESPN
 
 ## Getting Started
 
