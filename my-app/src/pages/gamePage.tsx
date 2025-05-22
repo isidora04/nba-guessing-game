@@ -8,6 +8,15 @@ const GamePage = () => {
 
     const defaultGuess: GuessFeedback = HandleGuess.getBlankGuess();
 
+    const divisionShortForm = {
+        Atlantic: "Atl",
+        Central: "Cen",
+        Southeast: "SE",
+        Northwest: "NW",
+        Pacific: "Pac",
+        Southwest: "SW",
+    };
+
     const [ targetPlayer, setTargetPlayer ] = useState<PlayerInfo>({
             name: "",
             position: "",
@@ -26,6 +35,7 @@ const GamePage = () => {
     const [ winCount, setWinCount ] = useState(0);
     const [ gamesPlayed, setGamesPlayed ] = useState(0);
     const [ error, setError ] = useState("");
+    const [ helpPopup, setHelpPopup ] = useState(false);
     const [ winPopup, setWinPopup ] = useState(false);
     const [ lossPopup, setLossPopup ] = useState(false);
 
@@ -59,7 +69,7 @@ const GamePage = () => {
             } catch (error) {
                 setError(`Error: ${error}`);
             }
-        }, 1000);
+        }, 700);
         return () => clearTimeout(getData);
     }, [search]);
 
@@ -110,9 +120,26 @@ const GamePage = () => {
                 <p>Guess the NBA player in 8 tries!</p>
                 <div className="num-wins">
                     <p><Trophy className="trophy" />{winCount}/{gamesPlayed} wins</p>
-                    <button className="circle-help"><CircleHelp /></button>
+                    <button className="circle-help" onClick={() => setHelpPopup(!helpPopup)}>
+                        <CircleHelp />
+                    </button>
                 </div>
             </div>
+
+            {helpPopup && <>
+                <div className="help-popup">
+                    <div className="help-container">
+                    <h3>How to Play</h3>
+                        <ul className="instructions">
+                            <li>Try to guess the NBA player in 8 guesses</li>
+                            <li>After each guess, you'll see which attributes match the target player</li>
+                            <li>Green means a perfect match</li>
+                            <li>Red means incorrect</li>
+                            <li>Play as many rounds as you want!</li>
+                        </ul>
+                    </div>
+                </div>
+            </>}
 
             {error && <p className="error-text">{error}</p>}
 
@@ -129,55 +156,56 @@ const GamePage = () => {
                     }
                 </div>)
             }
-            <table className="results-table">
-                <thead className="table-header">
-                    <tr className="table-headings">
-                        <th>Name</th>
-                        <th>Team</th>
-                        <th>Conference</th>
-                        <th>Division</th>
-                        <th>Position</th>
-                        <th>Age</th>
-                        <th>Height</th>
-                        <th>Number</th>
-                    </tr>
-                </thead>
-                <tbody className="table-body">
+            <div className="results-table">
+                <div className="table-header">
+                    <div className="name-col">Name</div>
+                    <div><span className="full-label">Team</span><span className="short-label">Team</span></div>
+                    <div><span className="full-label">Conference</span><span className="short-label">Conf</span></div>
+                    <div><span className="full-label">Division</span><span className="short-label">Div</span></div>
+                    <div><span className="full-label">Position</span><span className="short-label">Pos</span></div>
+                    <div><span>Age</span></div>
+                    <div><span className="full-label">Height</span><span className="short-label">Ht</span></div>
+                    <div><span className="full-label">Number</span><span className="short-label">#</span></div>
+                </div>
                 {guesses.map((guess, index) => (
-                    <tr className="results-table-row" key={index}>
-                        {guess.name.value === "" ? <td colSpan={9} className="unknown-row">?</td> : 
-                            <><td className={guess.name.match}>{guess.name.value}</td>
-                            <td className={guess.team.match}>{guess.team.value}</td>
-                            <td className={guess.conference.match}>{guess.conference.value}</td>
-                            <td className={guess.division.match}>{guess.division.value}</td>
-                            <td className={guess.position.match}>{guess.position.value}</td>
-                            <td className={guess.age.match}>
-                                <div>
+                    <div className="results-table-row" key={index}>
+                        {guess.name.value === "" ? <div className="unknown-row">?</div> : 
+                            <>
+                            <p className={`${guess.name.match} name-col`}>{guess.name.value}</p>
+                            <p className={guess.team.match}>{guess.team.value}</p>
+                            <p className={guess.conference.match}>{guess.conference.value}</p>
+                            <p className={guess.division.match}><span className="full-div">{guess.division.value}</span>
+                            {/* 
+                            // @ts-ignore */}
+                                <span className="short-div">{divisionShortForm[guess.division.value]}</span>
+                            </p>
+                            <p className={guess.position.match}>{guess.position.value}</p>
+                            <p className={guess.age.match}>
+                                <span>
                                     {guess.age.value}
                                     {guess.age.match === "lower" && <ArrowDown className="arrow" />}
                                     {guess.age.match === "higher" && <ArrowUp className="arrow" />}
-                                </div>
-                            </td>
-                            <td className={guess.height.match}>
-                                <div>
+                                </span>
+                            </p>
+                            <p className={guess.height.match}>
+                                <span>
                                     {guess.height.value}
                                     {guess.height.match === "lower" && <ArrowDown className="arrow" />}
                                     {guess.height.match === "higher" && <ArrowUp className="arrow" />}
-                                </div>
-                            </td>
-                            <td className={guess.jerseyNumber.match}>
-                                <div>
+                                </span>
+                            </p>
+                            <p className={guess.jerseyNumber.match}>
+                                <span>
                                     {guess.jerseyNumber.value}
                                     {guess.jerseyNumber.match === "lower" && <ArrowDown className="arrow" />}
                                     {guess.jerseyNumber.match === "higher" && <ArrowUp className="arrow" />}
-                                </div>
-                            </td>
+                                </span>
+                            </p>
                         </>
                         }
-                    </tr>)
+                    </div>)
                 )}
-                </tbody>
-            </table>
+            </div>
 
             <button className="give-up" disabled={lossPopup || winPopup}
                 onClick={() => handleLoss()}>Give up?</button>
