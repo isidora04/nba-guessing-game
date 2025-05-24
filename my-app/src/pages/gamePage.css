@@ -263,21 +263,9 @@ td div {
     font-family: 'Inter', sans-serif;
 }
 
-.loss-popup-container div, .win-popup-container div {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 1.1rem;
-}
-
 .loss-popup-container h3, .win-popup-container h3 {
     margin: 0;
     font-size: 1.3rem;
-}
-
-.target-name {
-    color: #f97316; 
-    font-weight: 700;
 }
 
 .play-again-button {
@@ -308,7 +296,7 @@ td div {
 
 .help-popup {
     padding: 0;
-    margin-top: -1rem;
+    margin: -1rem 0.5rem 1rem 0.5rem;
     display: flex;
     justify-content: center;
     align-items: center;

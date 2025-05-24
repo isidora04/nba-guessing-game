@@ -20,6 +20,7 @@ export interface GuessFeedback {
 
 export class HandleGuess {
 
+    // return a blank GuessFeedback object
     static getBlankGuess(): GuessFeedback {
         return {
             name: {value: "", match: "incorrect"},
@@ -33,6 +34,7 @@ export class HandleGuess {
         }
     }
 
+    // compare the user's guess with the target and return a GuessFeedback object
     static checkGuess(guess: PlayerInfo, target: PlayerInfo): GuessFeedback {
         
         const res: GuessFeedback = {

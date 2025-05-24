@@ -213,9 +213,10 @@ const GamePage = () => {
             {lossPopup && 
                 <div className="loss-popup-container">
                     <h3>Game Over!</h3>
-                    <div>{`The player was `}
-                            <p className="target-name">{targetPlayer.name}</p>
-                        {`(${targetPlayer.team}, ${targetPlayer.position})`}</div>
+                    <p>{`The player was `}
+                            <span style={{color: "#f97316", fontWeight: "700"}}  
+                            >{targetPlayer.name}</span>
+                        {` (${targetPlayer.team}, ${targetPlayer.position})`}</p>
                     <button className="play-again-button" onClick={() => startNewRound()}
                         ><RefreshCw />Play Again</button>
                 </div>}
@@ -223,9 +224,10 @@ const GamePage = () => {
             {winPopup && 
                 <div className="win-popup-container">
                     <h3>You won! 🏆</h3>
-                    <div>{`The player was `}
-                            <p className="target-name">{targetPlayer.name}</p>
-                        {`(${targetPlayer.team}, ${targetPlayer.position})`}</div>
+                    <p>{`The player was `}
+                            <span style={{color: "#f97316", fontWeight: "700"}}
+                            >{targetPlayer.name}</span>
+                        {` (${targetPlayer.team}, ${targetPlayer.position})`}</p>
                     <button className="play-again-button" onClick={() => startNewRound()}
                         ><RefreshCw />Play Again</button>
                 </div>}
