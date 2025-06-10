@@ -3,6 +3,7 @@ import { PlayerInfo, PlayerProvider } from "../infrastructure/PlayerProvider";
 import { GuessFeedback, HandleGuess } from "../logic/HandleGuess";
 import { Trophy, CircleHelp, RefreshCw, ArrowDown, ArrowUp } from "lucide-react";
 import './gamePage.css';
+import DarkModeToggle from "../components/DarkModeToggle";
 
 const GamePage = () => {
 
@@ -28,6 +29,7 @@ const GamePage = () => {
             team: "",
             age: -1
     });
+
     const [ guessCount, setGuessCount ] = useState(0);
     const [ guesses, setGuesses ] = useState<GuessFeedback[]>(Array(8).fill(defaultGuess));
     const [ searchResults, setSearchResults ] = useState<any[]>([]);
@@ -123,6 +125,7 @@ const GamePage = () => {
                     <button className="circle-help" onClick={() => setHelpPopup(!helpPopup)}>
                         <CircleHelp />
                     </button>
+                    <span className="dark-toggle"><DarkModeToggle></DarkModeToggle></span>
                 </div>
             </div>
 
