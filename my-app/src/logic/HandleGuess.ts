@@ -1,10 +1,11 @@
 import { PlayerInfo } from "../infrastructure/PlayerProvider";
 
-type MatchType = "correct" | "incorrect" | "partial" | "higher" | "lower";
+type MatchType = "correct" | "incorrect" | "higher" | "lower";
 
 export interface AttributeFeedback {
   value: string | number;
   match: MatchType;
+  isClose?: boolean;
 }
 
 export interface GuessFeedback {
@@ -44,26 +45,26 @@ export class HandleGuess {
             },
             position: {
                 value: guess.position, 
-                match: guess.position === target.position ? "correct" :
-                    guess.position.split("-").includes(target.position) ||
-                    target.position.split("-").includes(guess.position) 
-                    ? "partial" : "incorrect"
+                match: guess.position === target.position ? "correct" : "incorrect"
             },
             height: {
                 value: guess.displayHeight, 
                 match: guess.height === target.height ? "correct" :
                     guess.height > target.height 
-                    ? "lower" : "higher"
+                    ? "lower" : "higher",
+                isClose: guess.height !== target.height && Math.abs(guess.height - target.height) <= 2 ? true : false // within 2 inches
             },
             jerseyNumber: {
                 value: guess.jerseyNumber, 
                 match: guess.jerseyNumber === target.jerseyNumber ? "correct" :
-                    guess.jerseyNumber > target.jerseyNumber ? "lower" : "higher"
+                    guess.jerseyNumber > target.jerseyNumber ? "lower" : "higher",
+                isClose: guess.jerseyNumber !== target.jerseyNumber && Math.abs(guess.jerseyNumber - target.jerseyNumber) <= 2 ? true : false // within 2 numbers
             },
             age: {
                 value: guess.age, 
                 match: guess.age === target.age ? "correct" :
-                    guess.age > target.age ? "lower" : "higher"
+                    guess.age > target.age ? "lower" : "higher",
+                isClose: guess.age !== target.age && Math.abs(guess.age - target.age) <= 2 ? true : false // within 2 years
             },
             conference: {
                 value: guess.conference, 

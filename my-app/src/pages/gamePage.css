@@ -40,6 +40,14 @@ h1 {
     margin: 2rem 0.5rem;
 }
 
+.error-text {
+    font-weight: 600;
+}
+
+.dark .error-text {
+    color: white;
+}
+
 .game-header p {
     color: rgb(88, 88, 88);
     font-size: 1.25rem;
@@ -167,6 +175,7 @@ h1 {
     font-family: 'Inter', sans-serif;
     font-size: 1rem;
     border-radius: 10px;
+    transition: background-color 0.25s ease-in-out;
 }
 
 .dark .search-results button {
@@ -285,7 +294,7 @@ h1 {
 
 .incorrect, .higher, .lower {
     background-color: rgba(255, 136, 136, 0.555);
-    color: rgb(125, 43, 43);
+    color: #7d2b2b;
 }
 
 .dark .incorrect, .dark .higher, .dark .lower {
@@ -306,7 +315,7 @@ td div {
 
 .correct {
     background-color: rgba(155, 255, 155, 0.441);
-    color: rgb(38, 90, 38);
+    color: #265a26;
 }
 
 .dark .correct {
@@ -316,7 +325,7 @@ td div {
 
 .partial {
     background-color: rgba(255, 255, 150, 0.461);
-    color: rgb(83, 83, 18);
+    color: #535312;
 }
 
 .dark .partial {

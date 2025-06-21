@@ -4,6 +4,7 @@ import { GuessFeedback, HandleGuess } from "../logic/HandleGuess";
 import { Trophy, CircleHelp, RefreshCw, ArrowDown, ArrowUp } from "lucide-react";
 import './gamePage.css';
 import DarkModeToggle from "../components/DarkModeToggle";
+import { Collapse, Grow } from "@mui/material";
 
 const GamePage = () => {
 
@@ -51,6 +52,7 @@ const GamePage = () => {
             setGuesses(Array(8).fill(defaultGuess));
             setWinPopup(false);
             setLossPopup(false);
+            setError("");
 
             const randomPlayer = await PlayerProvider.getRandomPlayer();
             setTargetPlayer(randomPlayer);
@@ -77,8 +79,14 @@ const GamePage = () => {
 
     const handleClick = async (player: PlayerInfo) => {
         try {
+            setError(""); // reset from prev guess
             if (!targetPlayer.name) {
                 setError("Error: could not get target player");
+                return;
+            }
+
+            if (guesses.some((guess) => guess.name.value === player.name)) {
+                setError("Already guessed this player!");
                 return;
             }
 
@@ -91,7 +99,6 @@ const GamePage = () => {
             setGuessCount(guessCount + 1);
 
             if (guessFeedback.name.match === "correct") {
-                setWinCount(winCount + 1);
                 handleWin();
             }
             if (guessFeedback.name.match !== "correct" && guessCount + 1 === 8) {
@@ -129,22 +136,25 @@ const GamePage = () => {
                 </div>
             </div>
 
-            {helpPopup && <>
-                <div className="help-popup">
-                    <div className="help-container">
-                    <h3>How to Play</h3>
-                        <ul className="instructions">
-                            <li>Try to guess the NBA player in 8 guesses</li>
-                            <li>After each guess, you'll see which attributes match the target player</li>
-                            <li>Green means a perfect match</li>
-                            <li>Red means incorrect</li>
-                            <li>Play as many rounds as you want!</li>
-                        </ul>
-                    </div>
+            {/* Game instructions */}
+            <Collapse className="help-popup" in={helpPopup}>
+                <div className="help-container">
+                <h3>How to Play</h3>
+                    <ul className="instructions">
+                        <li>Try to guess the NBA player in 8 guesses</li>
+                        <li>After each guess, you'll see which attributes match the target player</li>
+                        <li><span style={{color: "#34d399", 
+                            fontWeight: "600"}}>Green</span> means a perfect match</li>
+                        <li><span style={{color: "#f87171", 
+                            fontWeight: "600"}}>Red</span> means incorrect</li>
+                        <li><span style={{color: "#facc15", 
+                            fontWeight: "600"}}>Yellow</span> means close: Age, height, or jersey number is off by at most 2</li>
+                        <li>Play as many rounds as you want!</li>
+                    </ul>
                 </div>
-            </>}
+            </Collapse>
 
-            {error && <p className="error-text">{error}</p>}
+            <Grow in={error !== ""}><p className="error-text">{error}</p></Grow>
 
             <input type="text" placeholder="Search players" className="search-bar"
                 value={search} onChange={(e) => setSearch(e.target.value)} 
@@ -183,21 +193,21 @@ const GamePage = () => {
                                 <span className="short-div">{divisionShortForm[guess.division.value]}</span>
                             </p>
                             <p className={guess.position.match}>{guess.position.value}</p>
-                            <p className={guess.age.match}>
+                            <p className={`${guess.age.match} ${guess.age.isClose ? "partial" : ""}`}>
                                 <span>
                                     {guess.age.value}
                                     {guess.age.match === "lower" && <ArrowDown className="arrow" />}
                                     {guess.age.match === "higher" && <ArrowUp className="arrow" />}
                                 </span>
                             </p>
-                            <p className={guess.height.match}>
+                            <p className={`${guess.height.match} ${guess.height.isClose ? "partial" : ""}`}>
                                 <span>
                                     {guess.height.value}
                                     {guess.height.match === "lower" && <ArrowDown className="arrow" />}
                                     {guess.height.match === "higher" && <ArrowUp className="arrow" />}
                                 </span>
                             </p>
-                            <p className={guess.jerseyNumber.match}>
+                            <p className={`${guess.jerseyNumber.match} ${guess.jerseyNumber.isClose ? "partial" : ""}`}>
                                 <span>
                                     {guess.jerseyNumber.value}
                                     {guess.jerseyNumber.match === "lower" && <ArrowDown className="arrow" />}
