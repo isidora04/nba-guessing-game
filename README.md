@@ -1,6 +1,6 @@
 # NBA Player Guessing Game
 
-[![Deploy Frontend](https://img.shields.io/badge/deploy-frontend-blue)](https://nba-guessing-game.vercel.app/play)
+[![Deploy Frontend](https://img.shields.io/badge/deploy-frontend-blue)](https://nba-guessing-game.netlify.app/play)
 
 
 ## Description
